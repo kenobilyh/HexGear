@@ -1,0 +1,17 @@
+/* Traditional Chinese */
+"tab_converter" = "色彩轉換";
+"tab_blender" = "混色 / 對比";
+"light" = "亮";
+"dark" = "暗";
+"history" = "歷史紀錄";
+"hex_code" = "HEX 代碼";
+"foreground_label" = "前景 (FG)";
+"foreground" = "前景";
+"background_label" = "背景 (BG)";
+"background" = "背景";
+"opacity" = "透明度";
+"wcag_contrast" = "WCAG 對比度";
+"output_format" = "輸出格式";
+"change" = "變更";
+"pass" = "通過";
+"fail" = "未通過";

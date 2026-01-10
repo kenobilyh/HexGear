@@ -1,0 +1,17 @@
+/* English */
+"tab_converter" = "Color Conversion";
+"tab_blender" = "Blender / Contrast";
+"light" = "Light";
+"dark" = "Dark";
+"history" = "History";
+"hex_code" = "HEX CODE";
+"foreground_label" = "Foreground (FG)";
+"foreground" = "Foreground";
+"background_label" = "Background (BG)";
+"background" = "Background";
+"opacity" = "Opacity";
+"wcag_contrast" = "WCAG Contrast";
+"output_format" = "Output Format";
+"change" = "Change";
+"pass" = "PASS";
+"fail" = "FAIL";

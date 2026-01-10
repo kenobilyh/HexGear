@@ -7,18 +7,39 @@
 
 import SwiftUI
 
+// MARK: - 2. 主視圖 (Main Views)
+
 struct ContentView: View {
+    @State private var selectedTab: Int = 0
+    @AppStorage("codeFormat") private var codeFormat: CodeFormat = .swiftUI
+    
+    // 共享狀態
+    @State private var history: [Color] = [
+        Color(hex: "#EF4444")!, Color(hex: "#10B981")!, Color(hex: "#F59E0B")!, Color(hex: "#6366F1")!, Color(hex: "#EC4899")!
+    ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $selectedTab) {
+            ConverterView(history: $history, codeFormat: $codeFormat)
+                .tabItem {
+                    Label(LocalizedStringKey("tab_converter"), systemImage: "arrow.left.arrow.right")
+                }
+                .tag(0)
+            
+            BlenderView(codeFormat: $codeFormat)
+                .tabItem {
+                    Label(LocalizedStringKey("tab_blender"), systemImage: "drop.fill")
+                }
+                .tag(1)
         }
         .padding()
+        .frame(minWidth: 400, minHeight: 600)
     }
 }
 
-#Preview {
-    ContentView()
+// 預覽
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
