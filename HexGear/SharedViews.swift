@@ -11,17 +11,72 @@ import SwiftUI
 
 struct RGBField: View {
     let label: String
-    let value: Int
+    @Binding var value: Int
+    @State private var textInput: String = ""
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         VStack(spacing: 4) {
             Text(label).font(.caption2).bold().foregroundColor(.secondary)
-            Text("\(value)")
+            TextField("", text: $textInput)
                 .font(.system(.body, design: .monospaced))
+                .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(8)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
+                .focused($isFocused)
+                // update textInput when external value changes (only if not focused to avoid fighting)
+                .onChange(of: value) { _, newValue in
+                    if !isFocused {
+                        textInput = "\(newValue)"
+                    }
+                }
+                // initial set
+                .onAppear {
+                    textInput = "\(value)"
+                }
+                // Update value when text changes
+                .onChange(of: textInput) { _, newValue in
+                    // Allow empty for editing experience
+                    if newValue.isEmpty { return }
+                    
+                    // Filter non-numbers
+                    let filtered = newValue.filter { "0123456789".contains($0) }
+                    
+                    if filtered != newValue {
+                         textInput = filtered
+                    }
+                    
+                    if let intVal = Int(filtered) {
+                        // Clamp to 0-255
+                        if intVal > 255 {
+                            textInput = "255"
+                            value = 255
+                        } else {
+                            value = intVal
+                        }
+                    }
+                }
+                // When focus is lost, ensure valid state
+                .onSubmit {
+                    validateInput()
+                }
+                .onChange(of: isFocused) { _, focused in
+                    if !focused {
+                        validateInput()
+                    }
+                }
+        }
+    }
+    
+    private func validateInput() {
+        if let intVal = Int(textInput) {
+            value = min(max(intVal, 0), 255)
+            textInput = "\(value)"
+        } else {
+            // reset to current valid value if input is invalid/empty
+            textInput = "\(value)"
         }
     }
 }
