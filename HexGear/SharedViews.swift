@@ -95,3 +95,37 @@ struct CodeOutputView: View {
         }
     }
 }
+
+struct HexInputView: View {
+    @Binding var hexInput: String
+    @Binding var selectedColor: Color
+    
+    var body: some View {
+        GroupBox {
+            HStack {
+                Text("#")
+                    .foregroundColor(.secondary)
+                    .font(.system(.body, design: .monospaced))
+                TextField("HEX", text: $hexInput)
+                    .font(.system(.body, design: .monospaced))
+                    .textFieldStyle(.plain)
+                    .onChange(of: hexInput) { _, newValue in
+                        if let newColor = Color(hex: newValue) {
+                            selectedColor = newColor
+                        }
+                    }
+                
+                Button {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(hexInput, forType: .string)
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(6)
+        } label: {
+            Text(LocalizedStringKey("hex_code")).font(.caption).foregroundColor(.secondary)
+        }
+    }
+}

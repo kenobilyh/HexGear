@@ -41,7 +41,7 @@ struct ConverterView: View {
                     }
                 
                 // 原生 ColorPicker (自帶吸管功能)
-                ColorPicker("", selection: $selectedColor, supportsOpacity: false)
+                ColorPicker("Pick a Color", selection: $selectedColor, supportsOpacity: false)
                     .labelsHidden()
                     .padding(10)
                     .background(.white.opacity(0.8))
@@ -83,38 +83,22 @@ struct ConverterView: View {
             Divider()
             
             // 3. Hex 輸入
-            GroupBox {
-                HStack {
-                    Text("#")
-                        .foregroundColor(.secondary)
-                        .font(.system(.body, design: .monospaced))
-                    TextField("HEX", text: $hexInput)
-                        .font(.system(.body, design: .monospaced))
-                        .textFieldStyle(.plain)
-                        .onChange(of: hexInput) { _, newValue in
-                            if let newColor = Color(hex: newValue) {
-                                selectedColor = newColor
-                            }
-                        }
-                    
-                    Button {
-                        copyToClipboard(hexInput)
-                    } label: {
-                        Image(systemName: "doc.on.doc")
-                    }
-                    .buttonStyle(.plain)
-                }
-                .padding(6)
-            } label: {
-                Text(LocalizedStringKey("hex_code")).font(.caption).foregroundColor(.secondary)
-            }
+            HexInputView(hexInput: $hexInput, selectedColor: $selectedColor)
             
-            // 4. RGB 數值顯示 (簡化顯示)
-            let rgb = selectedColor.rgbValues
+            // 4. RGB 數值顯示 (可編輯)
             HStack(spacing: 10) {
-                RGBField(label: "R", value: rgb.r)
-                RGBField(label: "G", value: rgb.g)
-                RGBField(label: "B", value: rgb.b)
+                RGBField(label: "R", value: Binding(
+                    get: { Int(selectedColor.rgbValues.r) },
+                    set: { updateColor(r: $0) }
+                ))
+                RGBField(label: "G", value: Binding(
+                    get: { Int(selectedColor.rgbValues.g) },
+                    set: { updateColor(g: $0) }
+                ))
+                RGBField(label: "B", value: Binding(
+                    get: { Int(selectedColor.rgbValues.b) },
+                    set: { updateColor(b: $0) }
+                ))
             }
             
             Spacer()
@@ -129,12 +113,29 @@ struct ConverterView: View {
     
     // Helper Functions
     func updateHexFromColor(_ color: Color) {
+//        guard color != selectedColor else { return }
         if let hex = color.toHex() {
             hexInput = hex
         }
     }
     
+    func updateColor(r: Int? = nil, g: Int? = nil, b: Int? = nil) {
+        let currentRGB = selectedColor.rgbValues
+        let newR = r ?? currentRGB.r
+        let newG = g ?? currentRGB.g
+        let newB = b ?? currentRGB.b
+        
+        let newColor = Color(
+            red: Double(newR) / 255.0,
+            green: Double(newG) / 255.0,
+            blue: Double(newB) / 255.0
+        )
+        selectedColor = newColor
+        updateHexFromColor(newColor)
+    }
+    
     func addToHistory(_ color: Color) {
+//        guard color != selectedColor else { return }
         // 簡單去重並保持長度
         if let index = history.firstIndex(of: color) {
             history.remove(at: index)
@@ -145,9 +146,12 @@ struct ConverterView: View {
         }
     }
     
-    func copyToClipboard(_ text: String) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
-        // 這裡可以加入複製成功的動畫邏輯
+    
+}
+
+// preview
+struct ConverterView_Previews: PreviewProvider {
+    static var previews: some View {
+        ConverterView(history: .constant([]), codeFormat: .constant(.swiftUI))
     }
 }

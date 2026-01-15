@@ -13,7 +13,9 @@ struct BlenderView: View {
     @Binding var codeFormat: CodeFormat
     
     @State private var fgColor: Color = .white
+    @State private var fgHex: String = "FFFFFF"
     @State private var bgColor: Color = Color(hex: "#3B82F6")!
+    @State private var bgHex: String = "3B82F6"
     @State private var opacity: Double = 100.0
     
     var body: some View {
@@ -59,16 +61,12 @@ struct BlenderView: View {
             HStack(spacing: 20) {
                 VStack(alignment: .leading) {
                     Text(LocalizedStringKey("foreground_label")).font(.caption).foregroundColor(.secondary)
-                    ColorPicker(LocalizedStringKey("foreground"), selection: $fgColor)
-                        .labelsHidden()
-                        .frame(maxWidth: .infinity)
+                    HexInputView(hexInput: $fgHex, selectedColor: $fgColor)
                 }
                 
                 VStack(alignment: .leading) {
                     Text(LocalizedStringKey("background_label")).font(.caption).foregroundColor(.secondary)
-                    ColorPicker(LocalizedStringKey("background"), selection: $bgColor)
-                        .labelsHidden()
-                        .frame(maxWidth: .infinity)
+                    HexInputView(hexInput: $bgHex, selectedColor: $bgColor)
                 }
             }
             
