@@ -42,18 +42,6 @@ struct ConverterView: View {
                         .padding(8)
                         .foregroundColor(selectedColor.isLight ? .black : .white)
                     }
-                
-                // 原生 ColorPicker (自帶吸管功能)
-                ColorPicker("Pick a Color", selection: $selectedColor, supportsOpacity: false)
-                    .labelsHidden()
-                    .padding(10)
-                    .background(.white.opacity(0.8))
-                    .clipShape(Circle())
-                    .padding(8)
-                    .onChange(of: selectedColor, { _, newValue in
-                        updateHexFromColor(newValue)
-                        addToHistory(newValue)
-                    })
             }
             .shadow(radius: 2, y: 1)
             
@@ -86,7 +74,26 @@ struct ConverterView: View {
             Divider()
             
             // 3. Hex 輸入
+            HStack {
             HexInputView(hexInput: $hexInput, selectedColor: $selectedColor)
+                
+                // 原生 ColorPicker (自帶吸管功能)
+                ZStack {
+                    ColorPicker("Pick a Color", selection: $selectedColor, supportsOpacity: false)
+                        .labelsHidden()
+                        .padding(8)
+                        .onChange(of: selectedColor) { _, newValue in
+                            debouncer.input.send(newValue)
+                        }
+                        .onReceive(debouncer.$output) { color in
+                            if let color {
+                                addToHistory(color)
+                            }
+                        }
+                    Image(systemName: "eyedropper")
+                        .allowsHitTesting(false)
+                }
+            }
             
             // 4. RGB 數值顯示 (可編輯)
             HStack(spacing: 10) {
