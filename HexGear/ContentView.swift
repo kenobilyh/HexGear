@@ -14,9 +14,7 @@ struct ContentView: View {
     @AppStorage("codeFormat") private var codeFormat: CodeFormat = .swiftUI
     
     // 共享狀態
-    @State private var history: [Color] = [
-        Color(hex: "#EF4444")!, Color(hex: "#10B981")!, Color(hex: "#F59E0B")!, Color(hex: "#6366F1")!, Color(hex: "#EC4899")!
-    ]
+    @State private var history: [Color] = []
     
     var body: some View {
         TabView(selection: $selectedTab) {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 // MARK: - 3. 轉換器視圖 (Converter View)
 
@@ -13,9 +14,11 @@ struct ConverterView: View {
     @Binding var history: [Color]
     @Binding var codeFormat: CodeFormat
     
-    @State private var selectedColor: Color = Color(hex: "#3B82F6")!
-    @State private var hexInput: String = "#3B82F6"
+    @State private var selectedColor: Color = Color(hex: Self.defaultColorString)!
+    @State private var hexInput = Self.defaultColorString
     @State private var copyFeedback: Bool = false
+    @StateObject private var debouncer = HistoryDebouncer()
+    private static let defaultColorString = "#3B82F6"
     
     var body: some View {
         VStack(spacing: 20) {
@@ -71,8 +74,8 @@ struct ConverterView: View {
                                 .frame(width: 32, height: 32)
                                 .overlay(Circle().stroke(Color.gray.opacity(0.3), lineWidth: 1))
                                 .onTapGesture {
+                                    NSApp.keyWindow?.makeFirstResponder(nil)
                                     selectedColor = color
-                                    updateHexFromColor(color)
                                 }
                         }
                     }
@@ -112,13 +115,6 @@ struct ConverterView: View {
     }
     
     // Helper Functions
-    func updateHexFromColor(_ color: Color) {
-//        guard color != selectedColor else { return }
-        if let hex = color.toHex() {
-            hexInput = hex
-        }
-    }
-    
     func updateColor(r: Int? = nil, g: Int? = nil, b: Int? = nil) {
         let currentRGB = selectedColor.rgbValues
         let newR = r ?? currentRGB.r
@@ -131,11 +127,9 @@ struct ConverterView: View {
             blue: Double(newB) / 255.0
         )
         selectedColor = newColor
-        updateHexFromColor(newColor)
     }
     
     func addToHistory(_ color: Color) {
-//        guard color != selectedColor else { return }
         // 簡單去重並保持長度
         if let index = history.firstIndex(of: color) {
             history.remove(at: index)
@@ -145,8 +139,21 @@ struct ConverterView: View {
             history = Array(history.prefix(7))
         }
     }
+    }
     
+class HistoryDebouncer: ObservableObject {
+    let input = PassthroughSubject<Color, Never>()
+    @Published var output: Color?
+    private var cancellables = Set<AnyCancellable>()
     
+    init() {
+        input
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { [weak self] color in
+                self?.output = color
+            }
+            .store(in: &cancellables)
+    }
 }
 
 // preview
