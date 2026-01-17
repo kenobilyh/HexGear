@@ -1,6 +1,7 @@
 /* Traditional Chinese */
 "tab_converter" = "色彩轉換";
 "tab_blender" = "混色 / 對比";
+"tab_blender" = "圖片色票擷取";
 "light" = "亮";
 "dark" = "暗";
 "recent" = "最近使用";
@@ -15,3 +16,6 @@
 "change" = "變更";
 "pass" = "通過";
 "fail" = "未通過";
+"drag_drop_image" = "拖放圖片到此處";
+"paste_image" = "從剪貼簿貼上";
+"no_colors_extracted" = "未擷取到顏色";

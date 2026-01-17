@@ -1,6 +1,7 @@
 /* English */
 "tab_converter" = "Color Conversion";
 "tab_blender" = "Blender / Contrast";
+"tab_palette" = "Image Palette Generator";
 "light" = "Light";
 "dark" = "Dark";
 "recent" = "Recent";
@@ -15,3 +16,6 @@
 "change" = "Change";
 "pass" = "PASS";
 "fail" = "FAIL";
+"drag_drop_image" = "Drag & Drop Image Here";
+"paste_image" = "Paste from Clipboard";
+"no_colors_extracted" = "No colors extracted.";
