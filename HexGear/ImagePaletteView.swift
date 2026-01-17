@@ -46,11 +46,26 @@ struct ImagePaletteView: View {
                     .frame(height: 200)
                 
                 if let img = inputImage {
-                    Image(nsImage: img)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxHeight: 190)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    ZStack(alignment: .topTrailing) {
+                        Image(nsImage: img)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 190)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        
+                        Button {
+                            withAnimation {
+                                reset()
+                            }
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.title2)
+                                .foregroundStyle(.white, .gray)
+                                .shadow(radius: 2)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(8)
+                    }
                 } else {
                     VStack(spacing: 12) {
                         Image(systemName: "photo.on.rectangle.angled")
