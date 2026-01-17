@@ -3,7 +3,7 @@
 "tab_blender" = "混色 / 對比";
 "light" = "亮";
 "dark" = "暗";
-"history" = "歷史紀錄";
+"recent" = "最近使用";
 "hex_code" = "HEX 代碼";
 "foreground_label" = "前景 (FG)";
 "foreground" = "前景";

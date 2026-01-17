@@ -3,7 +3,7 @@
 "tab_blender" = "Blender / Contrast";
 "light" = "Light";
 "dark" = "Dark";
-"history" = "History";
+"recent" = "Recent";
 "hex_code" = "HEX CODE";
 "foreground_label" = "Foreground (FG)";
 "foreground" = "Foreground";

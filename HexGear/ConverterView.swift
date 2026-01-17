@@ -57,7 +57,7 @@ struct ConverterView: View {
             // 2. 歷史紀錄
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Label(LocalizedStringKey("history"), systemImage: "clock")
+                    Label(LocalizedStringKey("recent"), systemImage: "clock")
                         .font(.caption)
                         .foregroundColor(.secondary)
                     Spacer()
