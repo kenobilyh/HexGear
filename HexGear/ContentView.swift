@@ -11,20 +11,17 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: Int = 0
-    @AppStorage("codeFormat") private var codeFormat: CodeFormat = .swiftUI
-    
-    // 共享狀態
-    @State private var history: [Color] = []
+    @StateObject private var appState = AppState()
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            ConverterView(history: $history, codeFormat: $codeFormat)
+            ConverterView(history: $appState.history, codeFormat: $appState.codeFormat)
                 .tabItem {
                     Label(LocalizedStringKey("tab_converter"), systemImage: "arrow.left.arrow.right")
                 }
                 .tag(0)
             
-            BlenderView(codeFormat: $codeFormat)
+            BlenderView(codeFormat: $appState.codeFormat)
                 .tabItem {
                     Label(LocalizedStringKey("tab_blender"), systemImage: "drop.fill")
                 }
