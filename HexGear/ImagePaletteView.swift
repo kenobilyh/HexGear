@@ -25,6 +25,7 @@ struct ImagePaletteView: View {
     @State private var results: [PaletteResult] = []
     @State private var isDragging = false
     @State private var selectedResultId: UUID?
+    @State private var applyBackground = false
     @Binding var codeFormat: CodeFormat
     
     // Default selecting the first one or logic
@@ -39,54 +40,62 @@ struct ImagePaletteView: View {
         VStack(spacing: 20) {
             
             // 1. Drag & Drop Zone
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(isDragging ? Color.blue : Color.gray.opacity(0.3), lineWidth: isDragging ? 3 : 2)
-                    .background(Color.gray.opacity(0.05))
-                    .frame(height: 200)
-                
-                if let img = inputImage {
-                    ZStack(alignment: .topTrailing) {
-                        Image(nsImage: img)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxHeight: 190)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+            VStack(alignment: .leading, spacing: 8) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .strokeBorder(isDragging ? Color.blue : Color.gray.opacity(0.3), lineWidth: isDragging ? 3 : 2)
+                        .background(applyBackground && !results.isEmpty ? selectedColor : Color.gray.opacity(0.05))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .frame(height: 200)
                         
-                        Button {
-                            withAnimation {
-                                reset()
+                    if let img = inputImage {
+                        ZStack(alignment: .topTrailing) {
+                            Image(nsImage: img)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxHeight: 180) // Slightly smaller to show background if applied
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .padding(10)
+                            
+                            Button {
+                                withAnimation {
+                                    reset()
+                                }
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(.white, .gray)
+                                    .shadow(radius: 2)
                             }
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title2)
-                                .foregroundStyle(.white, .gray)
-                                .shadow(radius: 2)
+                            .buttonStyle(.plain)
+                            .padding(8)
                         }
-                        .buttonStyle(.plain)
-                        .padding(8)
-                    }
-                } else {
-                    VStack(spacing: 12) {
-                        Image(systemName: "photo.on.rectangle.angled")
-                            .font(.system(size: 40))
-                            .foregroundColor(.secondary)
-                        Text(LocalizedStringKey("drag_drop_image"))
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        Button {
-                           pasteFromClipboard()
-                        } label: {
-                            Label(LocalizedStringKey("paste_image"), systemImage: "doc.on.clipboard")
+                    } else {
+                        VStack(spacing: 12) {
+                            Image(systemName: "photo.on.rectangle.angled")
+                                .font(.system(size: 40))
+                                .foregroundColor(.secondary)
+                            Text(LocalizedStringKey("drag_drop_image"))
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                            
+                            Button {
+                               pasteFromClipboard()
+                            } label: {
+                                Label(LocalizedStringKey("paste_image"), systemImage: "doc.on.clipboard")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.small)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
                     }
                 }
-            }
-            .onDrop(of: [UTType.image], isTargeted: $isDragging) { providers in
-                loadContent(from: providers)
+                .onDrop(of: [UTType.image], isTargeted: $isDragging) { providers in
+                    loadContent(from: providers)
+                }
+                
+                Toggle("Apply selected color to background", isOn: $applyBackground)
+                    .toggleStyle(.checkbox)
+                    .disabled(results.isEmpty)
             }
             
             Divider()
