@@ -14,10 +14,8 @@ struct HexGearApp: App {
             ContentView()
         }
         
-        MenuBarExtra("Color Tool", systemImage: "eyedropper") {
-            // 重用轉換器視圖 (ConverterView)，並開啟精簡模式
+        MenuBarExtra("Color Tool", image: "MenuBarIcon") {
             ConverterView(history: .constant([]), codeFormat: .constant(.swiftUI))
-                .frame(width: 300, height: 400)
             
             Divider()
             
