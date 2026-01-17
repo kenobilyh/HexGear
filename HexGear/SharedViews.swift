@@ -154,6 +154,7 @@ struct CodeOutputView: View {
 struct HexInputView: View {
     @Binding var hexInput: String
     @Binding var selectedColor: Color
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         GroupBox {
@@ -164,9 +165,25 @@ struct HexInputView: View {
                 TextField("HEX", text: $hexInput)
                     .font(.system(.body, design: .monospaced))
                     .textFieldStyle(.plain)
+                    .focused($isFocused)
                     .onChange(of: hexInput) { _, newValue in
-                        if let newColor = Color(hex: newValue) {
-                            selectedColor = newColor
+                        if isFocused {
+                            if let newColor = Color(hex: newValue) {
+                                selectedColor = newColor
+                            }
+                        }
+                    }
+                    .onChange(of: selectedColor) { _, newColor in
+                        if !isFocused {
+                            if let hex = newColor.toHex() {
+                                hexInput = hex
+                            }
+                        }
+                    }
+                    .onAppear {
+                        // Initial sync if needed, though typically bindings are set up
+                        if let hex = selectedColor.toHex(), hexInput.isEmpty {
+                            hexInput = hex
                         }
                     }
                 
