@@ -26,6 +26,12 @@ struct ContentView: View {
                     Label(LocalizedStringKey("tab_blender"), systemImage: "drop.fill")
                 }
                 .tag(1)
+            
+            ImagePaletteView(codeFormat: $appState.codeFormat)
+                .tabItem {
+                    Label(LocalizedStringKey("tab_palette"), systemImage: "photo.on.rectangle")
+                }
+                .tag(2)
         }
         .padding()
         .frame(minWidth: 400, minHeight: 600)
