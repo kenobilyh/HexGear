@@ -47,7 +47,7 @@ struct ImagePaletteView: View {
                         .background(applyBackground && !results.isEmpty ? selectedColor : Color.gray.opacity(0.05))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .frame(height: 200)
-                        
+                    
                     if let img = inputImage {
                         ZStack(alignment: .topTrailing) {
                             Image(nsImage: img)
@@ -80,7 +80,7 @@ struct ImagePaletteView: View {
                                 .foregroundColor(.secondary)
                             
                             Button {
-                               pasteFromClipboard()
+                                pasteFromClipboard()
                             } label: {
                                 Label(LocalizedStringKey("paste_image"), systemImage: "doc.on.clipboard")
                             }
@@ -109,16 +109,21 @@ struct ImagePaletteView: View {
                 }
                 .frame(maxHeight: .infinity)
             } else {
-                ScrollView {
-                    HStack(spacing: 20) {
-                        ForEach(results) { res in
-                            ResultCard(result: res, isSelected: selectedResultId == res.id)
-                                .onTapGesture {
-                                    selectedResultId = res.id
-                                }
-                        }
+                VStack {
+                    HStack {
+                        Label(LocalizedStringKey("recommended_backgrounds"), systemImage: "paint.bucket.classic").font(.caption.bold())
+                        Spacer()
                     }
-                    .padding()
+                    ScrollView {
+                        HStack(spacing: 20) {
+                            ForEach(results) { res in
+                                ResultCard(result: res, isSelected: selectedResultId == res.id)
+                                    .onTapGesture {
+                                        selectedResultId = res.id
+                                    }
+                            }
+                        }.padding()
+                    }
                 }
             }
             
@@ -133,7 +138,9 @@ struct ImagePaletteView: View {
         .padding()
         .animation(.spring(), value: results.count)
     }
-    
+}
+
+extension ImagePaletteView {
     // MARK:Logic
     
     private func loadContent(from providers: [NSItemProvider]) -> Bool {

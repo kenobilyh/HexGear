@@ -27,6 +27,8 @@ class AppState: ObservableObject {
     }
     
     init() {
+        // For debug: reset UserDefaults
+//        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         // Load CodeFormat
         if let savedFormat = UserDefaults.standard.string(forKey: codeFormatKey),
            let format = CodeFormat(rawValue: savedFormat) {
