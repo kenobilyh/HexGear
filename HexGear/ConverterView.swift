@@ -14,11 +14,25 @@ struct ConverterView: View {
     @Binding var history: [Color]
     @Binding var codeFormat: CodeFormat
     
-    @State private var selectedColor: Color = Color(hex: Self.defaultColorString)!
-    @State private var hexInput = Self.defaultColorString
+    @State private var selectedColor: Color
+    @State private var hexInput: String
     @State private var copyFeedback: Bool = false
     @StateObject private var debouncer = HistoryDebouncer()
     private static let defaultColorString = "#3B82F6"
+    
+    init(history: Binding<[Color]>, codeFormat: Binding<CodeFormat>) {
+        self._history = history
+        self._codeFormat = codeFormat
+        
+        // 根據 history 設定初始顏色
+        if let firstColor = history.wrappedValue.first {
+            self._selectedColor = State(initialValue: firstColor)
+            self._hexInput = State(initialValue: firstColor.toHex() ?? Self.defaultColorString)
+        } else {
+            self._selectedColor = State(initialValue: Color(hex: Self.defaultColorString)!)
+            self._hexInput = State(initialValue: Self.defaultColorString)
+        }
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -155,7 +169,7 @@ class HistoryDebouncer: ObservableObject {
     
     init() {
         input
-            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main).dropFirst()
             .sink { [weak self] color in
                 self?.output = color
             }
