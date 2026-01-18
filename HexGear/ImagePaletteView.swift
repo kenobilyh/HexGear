@@ -168,8 +168,8 @@ extension ImagePaletteView {
     }
     
     private func performAnalysis(_ image: NSImage) {
-        self.inputImage = image
-        self.results = []
+        inputImage = image
+        results = []
         
         // Run specific algorithms
         
