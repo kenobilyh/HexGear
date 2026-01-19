@@ -9,13 +9,16 @@ import SwiftUI
 
 @main
 struct HexGearApp: App {
+    @StateObject private var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
         }
         
         MenuBarExtra("Color Tool", image: "MenuBarIcon") {
-            ConverterView(history: .constant([]), codeFormat: .constant(.swiftUI))
+            ConverterView(history: $appState.history, codeFormat: $appState.codeFormat)
             
             Divider()
             
