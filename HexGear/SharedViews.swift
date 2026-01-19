@@ -26,9 +26,12 @@ struct RGBField: View {
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
                 .focused($isFocused)
-                // update textInput when external value changes (only if not focused to avoid fighting)
+                // update textInput when external value changes
+                // 允許 focused 時更新，但只有當外部值與當前輸入不同時才更新
                 .onChange(of: value) { _, newValue in
-                    if !isFocused {
+                    let currentInputValue = Int(textInput)
+                    // 只有當新值與當前輸入值不同時才更新（避免打斷用戶輸入）
+                    if currentInputValue != newValue {
                         textInput = "\(newValue)"
                     }
                 }
@@ -174,8 +177,12 @@ struct HexInputView: View {
                         }
                     }
                     .onChange(of: selectedColor) { _, newColor in
-                        if !isFocused {
-                            if let hex = newColor.toHex() {
+                        // 允許 focused 時更新，但只有當新 hex 與當前輸入不同時才更新
+                        if let hex = newColor.toHex() {
+                            // 正規化比較：去除 # 並轉為大寫
+                            let normalizedNew = hex.replacingOccurrences(of: "#", with: "").uppercased()
+                            let normalizedCurrent = hexInput.replacingOccurrences(of: "#", with: "").uppercased()
+                            if normalizedNew != normalizedCurrent {
                                 hexInput = hex
                             }
                         }
