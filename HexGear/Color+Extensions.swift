@@ -76,6 +76,11 @@ extension Color {
     // 獲取 RGB 整數值
     var rgbValues: (r: Int, g: Int, b: Int) {
         guard let components = cgColor?.components, components.count >= 3 else { return (0,0,0) }
-        return (Int(components[0] * 255), Int(components[1] * 255), Int(components[2] * 255))
+        // 使用四捨五入以保持與 toHex 一致的精度
+        return (
+            Int(round(components[0] * 255)),
+            Int(round(components[1] * 255)),
+            Int(round(components[2] * 255))
+        )
     }
 }
