@@ -25,7 +25,7 @@ struct ImagePaletteView: View {
     @State private var results: [PaletteResult] = []
     @State private var isDragging = false
     @State private var selectedResultId: UUID?
-    @State private var applyBackground = false
+    @State private var applyBackground = true
     @Binding var codeFormat: CodeFormat
     
     // Default selecting the first one or logic

@@ -19,4 +19,5 @@
 "drag_drop_image" = "Drag & Drop Image Here";
 "paste_image" = "Paste from Clipboard";
 "no_colors_extracted" = "No colors extracted.";
+"apply_background" = "Apply selected color to background";
 "recommended_backgrounds" = "Recommended Backgrounds";
