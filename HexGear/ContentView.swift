@@ -20,18 +20,21 @@ struct ContentView: View {
                     Label(LocalizedStringKey("tab_converter"), systemImage: "arrow.left.arrow.right")
                 }
                 .tag(0)
+                .navigationTitle(Text(LocalizedStringKey("tab_converter")))
             
             BlenderView(codeFormat: $appState.codeFormat)
                 .tabItem {
                     Label(LocalizedStringKey("tab_blender"), systemImage: "drop.fill")
                 }
                 .tag(1)
+                .navigationTitle(Text(LocalizedStringKey("tab_blender")))
             
             ImagePaletteView(codeFormat: $appState.codeFormat)
                 .tabItem {
                     Label(LocalizedStringKey("tab_palette"), systemImage: "photo.on.rectangle")
                 }
                 .tag(2)
+                .navigationTitle(Text(LocalizedStringKey("tab_palette")))
         }
         .padding()
         .frame(minWidth: 400, minHeight: 600)
