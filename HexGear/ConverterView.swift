@@ -47,7 +47,7 @@ struct ConverterView: View {
                         // 亮度標籤
                         HStack(spacing: 4) {
                             Image(systemName: selectedColor.isLight ? "sun.max.fill" : "moon.fill")
-                            Text("\(selectedColor.isLight ? NSLocalizedString("light", comment: "") : NSLocalizedString("dark", comment: "")) (\(selectedColor.brightnessScore))")
+                            Text(selectedColor.isLight ? "light" : "dark")
                         }
                         .font(.caption.bold())
                         .padding(6)
