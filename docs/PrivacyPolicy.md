@@ -1,3 +1,8 @@
+---
+layout: default
+title: Privacy Policy
+---
+
 # 隱私權政策與內容權利聲明 (Privacy Policy & Content Rights)
 
 **最近更新日期：2026 年 5 月 10 日**
